@@ -7,24 +7,31 @@ var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, './src/index.js'),
+    app: path.resolve(__dirname, './src/js/index.js'),
     // 将 第三方依赖 单独打包
-    vendor: [
-      'react',
-      'react-dom',
-      'antd',
-      'axios',
-      'prop-types',
-      'react-mixin',
-      'react-redux',
-      'react-responsive',
-      'react-router-dom',
-      'redux'
-    ]
+    vendor: ['react', 'react-dom']
   },
   output: {
     path: __dirname + "/dist",
+    // filename 属性表示的是如何命名出来的入口文件，规则是一下三种：
+    // [name] 指代入口文件的name，也就是上面提到的entry参数的key，因此，我们可以在name里利用/，即可达到控制文件目录结构的效果。
+    // [hash]，指代本次编译的一个hash版本，值得注意的是，只要是在同一次编译过程中生成的文件，这个[hash].js
+    //的值就是一样的；在缓存的层面来说，相当于一次全量的替换。
     filename: "js/[name].[chunkhash:8].js",
+    // publicPath 参数表示的是一个URL 路径（指向生成文件的跟目录），用于生成css/js/图片/字体文件
+    // 等资源的路径以确保网页能正确地加载到这些资源.
+    // “publicPath”项则被许多Webpack的插件用于在生产模式下更新内嵌到css、html文件里的url值.
+    // 例如，在localhost（即本地开发模式）里的css文件中边你可能用“./test.png”这样的url来加载图片，
+    // 但是在生产模式下“test.png”文件可能会定位到CDN上并且你的Node.js服务器可能是运行在HeroKu上边的。
+    // 这就意味着在生产环境你必须手动更新所有文件里的url为CDN的路径。
+    //开发环境：Server和图片都是在localhost（域名）下
+    //.image {
+    // background-image: url('./test.png');
+    //}
+    // 生产环境：Server部署下HeroKu但是图片在CDN上
+    //.image {
+    //  background-image: url('https://someCDN/test.png');
+    //}
     publicPath: './'
   },
 
@@ -33,8 +40,7 @@ module.exports = {
     extensions: ['*', '.js', '.json', '.less','.jsx'],
     //模块别名定义，方便后续直接引用别名，无须多写长长的地址
     alias: {
-      '@components': path.resolve(__dirname,'src/components'),
-      '@assets':path.resolve(__dirname,'src/assets')
+      '@components': path.resolve(__dirname,'src/js/components')
     }
   },
 
@@ -70,7 +76,7 @@ module.exports = {
           options: {
             limit: '8192',
             outputPath: 'images/',
-            publicPath : '/'
+            publicPath : '/images'
           }
         }
       }, {

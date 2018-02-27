@@ -1,0 +1,14 @@
+body {
+  background: #ccc;
+  color:red;
+}
+
+
+div {
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
+  background-image: url('../images/pig.jpg');
+  background-size: cover;
+  box-shadow: 5px 5px 30px #333;
+}
